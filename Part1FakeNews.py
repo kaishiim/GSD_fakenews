@@ -22,6 +22,13 @@ import pandas as pd
 url = "https://raw.githubusercontent.com/several27/FakeNewsCorpus/master/news_sample.csv"
 
 dataframe = pd.read_csv(url)
+
+dataframe["content_clean"] = dataframe["content"].dropna().apply(clean_text)
+
+print(dataframe[["content", "content_clean"]].head(10))
+
+dataframe.to_csv("cleaned_dataset.csv", index=False)
+
 #Part 2
 #Part 3
 #Part 4
