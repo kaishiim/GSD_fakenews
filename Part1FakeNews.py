@@ -34,7 +34,7 @@ dataframe = pd.read_csv(url)
 
 dataframe["content_clean"] = dataframe["content"].dropna().apply(clean_text)
 
-print(dataframe[["content", "content_clean"]].head(10))
+print(dataframe["content_clean"].head(10))
 
 dataframe.to_csv("cleaned_dataset.csv", index=False)
 
