@@ -18,13 +18,13 @@ def clean_text(text):
     text = re.sub(r'\S+@\S+\.\S+', 'EMAIL', text)
     #Replacing urls with URL.
     text = re.sub(r'https?://\S+|www\.\S+', 'URL', text)
-    
+    return text
 
     # Tokenization: Opdeling af teksten i ord
-    tokens = word_tokenize(text)
+    #tokens = word_tokenize(text)
     
     # Returnerer tokens som en string, så de kan gemmes i CSV
-    return "[" + ", ".join(f"'{token}'" for token in tokens) + "]"  
+    #return "[" + ", ".join(f"'{token}'" for token in tokens) + "]"  
 
 import pandas as pd
 
