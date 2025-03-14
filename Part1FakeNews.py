@@ -12,10 +12,12 @@ def clean_text(text):
     #Replacing numbers with NUM.
     text = re.sub(r'\d+', 'NUM', text)
     #Replacing dates with DATE.
-    text = re.sub(r'\d{4}-\d{2}-\d{2}', 'DATE', text)
-    text = re.sub(r'\d{2}/\d{2}/\d{4}', 'DATE', text)
+    #text = re.sub(r'\d{4}-\d{2}-\d{2}', 'DATE', text)
+    #text = re.sub(r'\d{2}/\d{2}/\d{4}', 'DATE', text)
+    # Erstat datoer i forskellige formater (YYYY-MM-DD, DD/MM/YYYY, MM/DD/YYYY, osv.)
+    text = re.sub(r'\b(?:\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|\d{4}-\d{2}-\d{2})\b', '<DATE>', text)
     #Replacing emails with EMAIL.
-    text = re.sub(r'\S+@\S+\.\S+', 'EMAIL', text)
+    text = re.sub(r'\S+@\S+\.\S+.com+', 'EMAIL', text)
     #Replacing urls with URL.
     text = re.sub(r'https?://\S+|www\.\S+', 'URL', text)
 
