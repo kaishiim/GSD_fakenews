@@ -32,11 +32,10 @@ url = "https://raw.githubusercontent.com/several27/FakeNewsCorpus/master/news_sa
 
 dataframe = pd.read_csv(url)
 
-dataframe["content_clean"] = dataframe["content"].dropna().apply(clean_text)
+dataframe_cleaned = dataframe.map(lambda x: clean_text(str(x)))
+print(dataframe_cleaned.head(10))
 
-print(dataframe["content_clean"].head(10))
-
-dataframe.to_csv("cleaned_dataset.csv", index=False)
+dataframe_cleaned.to_csv("cleaned_dataset.csv", index=False)
 
 #Part 2
 #Part 3
