@@ -1,17 +1,17 @@
 import re
 
 def clean_text(text):
-    #Replaces text to lowercase
+    #Replaces text to be lowercase.
     text = text.lower()
-    #Replcaing spaces/lines:
+    #Removing spaces/lines.
     text = re.sub(r'\s+', ' ', text)
-    #Replacing numbers:
+    #Replacing numbers with NUM.
     text = re.sub(r'\d+', '<NUM>', text)
-    #Replacing dates:
+    #Replacing dates with DATE.
     text = re.sub(r'\d{4}-\d{2}-\d{2}', '<DATE>', text)
     text = re.sub(r'\d{2}/\d{2}/\d{4}', '<DATE>', text)
-    #Replacing emails:
+    #Replacing emails with EMAIL.
     text = re.sub(r'\S+@\S+\.\S+', '<EMAIL>', text)
-    #Replacing urls:
+    #Replacing urls with URL.
     text = re.sub(r'https?://\S+|www\.\S+', '<URL>', text)
     return text
