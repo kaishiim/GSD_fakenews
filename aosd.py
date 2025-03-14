@@ -16,3 +16,12 @@ def clean_text(text):
     #Replacing urls with URL.
     text = re.sub(r'https?://\S+|www\.\S+', '<URL>', text)
     return text
+
+import pandas as pd
+
+url = "https://raw.githubusercontent.com/several27/FakeNewsCorpus/master/news_sample.csv"
+
+dataframe = pd.read_csv(url)
+#Part 2
+#Part 3
+#Part 4
