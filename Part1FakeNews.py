@@ -15,7 +15,7 @@ def clean_text(text):
     text = re.sub(r'\d{4}-\d{2}-\d{2}', 'DATE', text)
     text = re.sub(r'\d{2}/\d{2}/\d{4}', 'DATE', text)
     #Replacing emails with EMAIL.
-    text = re.sub(r'\S+@\S+\.\S+', 'EMAIL', text)
+    text = re.sub(r'\S+@\S+\.\S+.com+', 'EMAIL', text)
     #Replacing urls with URL.
     text = re.sub(r'https?://\S+|www\.\S+', 'URL', text)
 
