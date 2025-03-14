@@ -1,9 +1,6 @@
-# Part 1
-## Task 1
 import re
-import nltk
-nltk.download('punkt_tab')
-from nltk.tokenize import word_tokenize
+#import nltk
+#from nltk.tokenize import word_tokenize
 
 def clean_text(text):
     # Konverter til små bogstaver
@@ -25,10 +22,10 @@ def clean_text(text):
     text = re.sub(r'\s+', ' ', text).strip()
 
     # Tokenization: Opdeling af teksten i ord
-    tokens = word_tokenize(text)
+    #tokens = word_tokenize(text)
     
     # Returnerer tokens som en string, så de kan gemmes i CSV
-    return "[" + ", ".join(f"'{token}'" for token in tokens) + "]"  
+    #return "[" + ", ".join(f"'{token}'" for token in tokens) + "]"  
 
 import pandas as pd
 
@@ -36,10 +33,12 @@ url = "https://raw.githubusercontent.com/several27/FakeNewsCorpus/master/news_sa
 
 dataframe = pd.read_csv(url)
 
-dataframe_cleaned = dataframe.map(lambda x: clean_text(str(x)))
-print(dataframe_cleaned.head(10))
+#We now use this on our dataframe from above to try and show how it works on the first 10 elements.
+dataframe["content_clean"] = dataframe["content"].dropna().apply(clean_text)
 
-dataframe_cleaned.to_csv("cleaned_dataset.csv", index=False)
+print(dataframe[["content", "content_clean"]].head(10))
+
+dataframe.to_csv("cleaned_dataset.csv", index=False)
 
 #Part 2
 #Part 3
