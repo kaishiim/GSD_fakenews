@@ -17,11 +17,7 @@ def clean_text(text):
     # Erstat datoer i forskellige formater (YYYY-MM-DD, DD/MM/YYYY, MM/DD/YYYY, osv.)
     text = re.sub(r'\b(?:\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|\d{4}-\d{2}-\d{2})\b', '<DATE>', text)
     #Replacing emails with EMAIL.
-<<<<<<< HEAD
     text = re.sub(r'\S+@\S+\.\S+.com+', 'EMAIL', text)
-=======
-    text = re.sub(r'\S+@\S+\.\S+\s.com+', 'EMAIL', text)
->>>>>>> 0dcf66568a6a0ea4229fddd5189b839c3b2b36f9
     #Replacing urls with URL.
     text = re.sub(r'https?://\S+|www\.\S+', 'URL', text)
 
