@@ -1,5 +1,6 @@
 # Part 1
 import re
+import pandas as pd
 
 def clean_text(text):
     #Replaces text to be lowercase.
@@ -16,8 +17,6 @@ def clean_text(text):
     #Replacing urls with URL.
     text = re.sub(r'https?://\S+|www\.\S+', '<URL>', text)
     return text
-
-import pandas as pd
 
 url = "https://raw.githubusercontent.com/several27/FakeNewsCorpus/master/news_sample.csv"
 
