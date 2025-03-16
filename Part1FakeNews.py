@@ -49,7 +49,7 @@ print(dataframe_cleaned.head(10))
 dataframe_cleaned.to_csv("cleaned_dataset.csv", index=False)
 
 # Læs CSV-fil
-file_path = r"C:\Users\yifan\Downloads\995,000_rows (1).csv"
+file_path = r"C:\Users\yifan\Downloads\995,000_rows (1).csv" #Skal erstattes med den faktiske filsti
 df = pd.read_csv(file_path, low_memory=False)
 
 df_cleaned = df.map(lambda x: clean_text(str(x)))
