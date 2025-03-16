@@ -89,13 +89,22 @@ print(f"Reduktionshastighed efter stemming: {stemming_reduction:.2f}%")
 
 
 
+# Læs CSV-fil
+#file_path = r"C:\Users\yifan\Downloads\995,000_rows (1).csv"
+#df = pd.read_csv(file_path, low_memory=False)
+
+#df_cleaned = df.map(lambda x: clean_text(str(x)))
+
+#print(df_cleaned.head(10))
+
+# Gem forbehandlede data
+#df_cleaned.to_csv("processed_995K_FakeNewsCorpus.csv", index=False)
 
 
 
 
+#df['processed_text'] = df['content'].astype(str).apply(clean_text)
 
-
-
-
-
-
+#Part 2
+#Part 3
+#Part 4
