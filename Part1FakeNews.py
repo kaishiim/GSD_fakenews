@@ -13,7 +13,8 @@ stop_words = set(stopwords.words('english'))
 #Her initialiserer vi stemmer til, at reducerer ordenes længde.
 stemmer = PorterStemmer()
 
-def clean_text(text):
+def clean_text(text, remove_stopwords=True, apply_stemming=True):
+
     # Konverter til små bogstaver
     text = text.lower()
     # Erstat e-mails
@@ -29,10 +30,21 @@ def clean_text(text):
 
     # Tokenization: Opdeling af teksten i ord
     tokens = word_tokenize(text)
+
     # Her fjerner vi stopwords fra vores csv fil.
-    tokens = [word for word in tokens if word not in stop_words]
+    #tokens = [word for word in tokens if word not in stop_words]
     # Her tilføjer vi stemmer, som reducerer længden af ordene.
-    tokens = [stemmer.stem(word) for word in tokens]
+    #tokens = [stemmer.stem(word) for word in tokens]
+    # Tokenization: Opdeling af teksten i ord
+    #tokens = word_tokenize(text)
+
+    # Fjern stopwords, hvis det er aktiveret
+    if remove_stopwords:
+        tokens = [word for word in tokens if word not in stop_words]
+
+    # Stem ordene, hvis det er aktiveret
+    if apply_stemming:
+        tokens = [stemmer.stem(word) for word in tokens]
 
     # Returnerer tokens som en string, så de kan gemmes i CSV
     return "[" + ", ".join(f"'{token}'" for token in tokens) + "]"  
@@ -48,19 +60,42 @@ print(dataframe_cleaned.head(10))
 
 dataframe_cleaned.to_csv("cleaned_dataset.csv", index=False)
 
-# Læs CSV-fil
-file_path = r"C:\Users\yifan\Downloads\995,000_rows (1).csv"
-df = pd.read_csv(file_path, low_memory=False)
 
-df_cleaned = df.map(lambda x: clean_text(str(x)))
+# Konverter alle tekstkolonner til én samlet tekststreng
+full_text = " ".join(dataframe.astype(str).sum())
 
-print(df_cleaned.head(10))
+# Oprindelig ordforrådsstørrelse
+original_tokens = set(word_tokenize(full_text.lower()))
+original_vocab_size = len(original_tokens)
 
-# Gem forbehandlede data
-df_cleaned.to_csv("processed_995K_FakeNewsCorpus.csv", index=False)
+# Efter fjernelse af stopord
+tokens_no_stopwords = set(clean_text(full_text, remove_stopwords=True, apply_stemming=False))
+vocab_size_no_stopwords = len(tokens_no_stopwords)
 
-#df['processed_text'] = df['content'].astype(str).apply(clean_text)
+# Efter stemming
+tokens_stemmed = set(clean_text(full_text, remove_stopwords=True, apply_stemming=True))
+vocab_size_stemmed = len(tokens_stemmed)
 
-#Part 2
-#Part 3
-#Part 4
+# Beregning af reduktionshastigheder
+stopword_reduction = (original_vocab_size - vocab_size_no_stopwords) / original_vocab_size * 100
+stemming_reduction = (vocab_size_no_stopwords - vocab_size_stemmed) / vocab_size_no_stopwords * 100
+
+# Udskriv resultater
+print(f"Oprindelig ordforrådsstørrelse: {original_vocab_size}")
+print(f"Ordforrådsstørrelse efter fjernelse af stopord: {vocab_size_no_stopwords}")
+print(f"Reduktionshastighed efter stopord: {stopword_reduction:.2f}%")
+print(f"Ordforrådsstørrelse efter stemming: {vocab_size_stemmed}")
+print(f"Reduktionshastighed efter stemming: {stemming_reduction:.2f}%")
+
+
+
+
+
+
+
+
+
+
+
+
+
