@@ -32,11 +32,11 @@ def clean_text(text, remove_stopwords=True, apply_stemming=True):
     tokens = word_tokenize(text)
 
     # Her fjerner vi stopwords fra vores csv fil.
-    #tokens = [word for word in tokens if word not in stop_words]
+    tokens = [word for word in tokens if word not in stop_words]
     # Her tilføjer vi stemmer, som reducerer længden af ordene.
-    #tokens = [stemmer.stem(word) for word in tokens]
+    tokens = [stemmer.stem(word) for word in tokens]
     # Tokenization: Opdeling af teksten i ord
-    #tokens = word_tokenize(text)
+    tokens = word_tokenize(text)
 
     # Fjern stopwords, hvis det er aktiveret
     if remove_stopwords:
@@ -87,7 +87,8 @@ print(f"Reduktionshastighed efter stopord: {stopword_reduction:.2f}%")
 print(f"Ordforrådsstørrelse efter stemming: {vocab_size_stemmed}")
 print(f"Reduktionshastighed efter stemming: {stemming_reduction:.2f}%")
 
-
+print(f"Før stopord fjernes: {original_tokens[:50]}")
+print(f"Efter stopord fjernes: {tokens_no_stopwords[:50]}")
 
 # Læs CSV-fil
 #file_path = r"C:\Users\yifan\Downloads\995,000_rows (1).csv"
