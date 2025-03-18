@@ -87,13 +87,11 @@ print(f"Reduktionshastighed efter stopord: {stopword_reduction:.2f}%")
 print(f"Ordforrådsstørrelse efter stemming: {vocab_size_stemmed}")
 print(f"Reduktionshastighed efter stemming: {stemming_reduction:.2f}%")
 
-#print(f"Før stopord fjernes: {list(original_tokens)[:50]}")
-#print(f"Efter stopord fjernes: {list(tokens_no_stopwords)[:50]}")
-print("Stopwords liste:", stopwords)
-print("Antal stopord i listen:", len(stop_words))
+#print("Stopwords liste:", stopwords)
+#print("Antal stopord i listen:", len(stop_words))
 
-print("Før stopword fjernes:", word_tokenize(full_text.lower())[:50])
-print("Efter stopword fjernes:", clean_text(full_text, remove_stopwords=True, apply_stemming=False).split()[:50])
+#print("Før stopword fjernes:", word_tokenize(full_text.lower())[:50])
+#print("Efter stopword fjernes:", clean_text(full_text, remove_stopwords=True, apply_stemming=False).split()[:50])
 
 # Læs CSV-fil
 #file_path = r"C:\Users\yifan\Downloads\995,000_rows (1).csv"
@@ -106,21 +104,25 @@ file_path = r"C:\Users\marti\OneDrive\Skrivebord\995000_rows.csv"
 #print(df_cleaned.head(10))
 print("Trying to start to read chunks:")
 #Ny måde, hvor vi prøver, at indlæse dokumentet lidt af gangen.
-chunksize = 10000  # Læs 10.000 rækker ad gangen
-df_list = []
-for chunk in pd.read_csv(file_path, chunksize=chunksize):
-    chunk["processed_text"] = chunk["content"].astype(str).apply(clean_text)
-    df_list.append(chunk)
-
-df = pd.concat(df_list, ignore_index=True)
-
-print(df.head(10))
+chunk_size = 10000  # Læs 10.000 rækker ad gangen
 
 # Gem forbehandlede data
-df.to_csv("processed_995K_FakeNewsCorpus.csv", index=False)
-#df_cleaned.to_csv("processed_995K_FakeNewsCorpus.csv", index=False)
+output_file = "processed_995K_FakeNewsCorpus.csv"
+first_chunk = True
+Times = 0
 
-#df['processed_text'] = df['content'].astype(str).apply(clean_text)
+for chunk in pd.read_csv(file_path, chunksize=chunk_size, usecols=["content"], low_memory=False):
+    chunk["processed_text"] = chunk["content"].astype(str).apply(clean_text)
+
+    mode = "w" if first_chunk else "a"
+
+    chunk.to.csv(output_file, mode=mode, header=first_chunk, index=False)
+
+    first_chunk = False
+    Times += len(chunk)
+    print(f"{Times}")
+
+print(f"Færdig")
 
 #Part 2
 #Part 3
