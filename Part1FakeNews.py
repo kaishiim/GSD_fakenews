@@ -25,7 +25,7 @@ def clean_text(text, remove_stopwords=True, apply_stemming=True):
     # Erstat tal (men ikke allerede erstattede datoer)
     text = re.sub(r'\b\d+\b', 'NUM', text)
     # Fjern ekstra mellemrum, tabulatorer og linjeskift
-    text = re.sub(r'\s+', ' ', text).strip()
+    text = re.sub(r'[^a-zA-Z0-9\s]', '', text)
 
     # Tokenization: Opdeling af teksten i ord
     tokens = word_tokenize(text)
@@ -36,7 +36,7 @@ def clean_text(text, remove_stopwords=True, apply_stemming=True):
     #tokens = [stemmer.stem(word) for word in tokens]
     # Tokenization: Opdeling af teksten i ord
     #tokens = word_tokenize(text)
-
+    
     # Fjern stopwords, hvis det er aktiveret
     if remove_stopwords:
         tokens = [word for word in tokens if word not in stop_words]
@@ -87,19 +87,25 @@ print(f"Reduktionshastighed efter stopord: {stopword_reduction:.2f}%")
 print(f"Ordforrådsstørrelse efter stemming: {vocab_size_stemmed}")
 print(f"Reduktionshastighed efter stemming: {stemming_reduction:.2f}%")
 
-print(f"Før stopord fjernes: {list(original_tokens)[:50]}")
-print(f"Efter stopord fjernes: {list(tokens_no_stopwords)[:50]}")
+#print(f"Før stopord fjernes: {list(original_tokens)[:50]}")
+#print(f"Efter stopord fjernes: {list(tokens_no_stopwords)[:50]}")
+print("Stopwords liste:", stopwords)
+print("Antal stopord i listen:", len(stop_words))
+
+print("Før stopword fjernes:", word_tokenize(full_text.lower())[:50])
+print("Efter stopword fjernes:", clean_text(full_text, remove_stopwords=True, apply_stemming=False).split()[:50])
 
 # Læs CSV-fil
 #file_path = r"C:\Users\yifan\Downloads\995,000_rows (1).csv"
-file_path = r"C:\Users\marti\OneDrive\Documents\Python Uni\995,000_rows.csv"
+file_path = r"C:\Users\marti\OneDrive\Skrivebord\995000_rows.csv"
 
 #df = pd.read_csv(file_path, low_memory=False)
 
 #df_cleaned = df.map(lambda x: clean_text(str(x)))
 
 #print(df_cleaned.head(10))
-
+print("Trying to start to read chunks:")
+#Ny måde, hvor vi prøver, at indlæse dokumentet lidt af gangen.
 chunksize = 10000  # Læs 10.000 rækker ad gangen
 df_list = []
 for chunk in pd.read_csv(file_path, chunksize=chunksize):
