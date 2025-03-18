@@ -25,17 +25,10 @@ def clean_text(text, remove_stopwords=True, apply_stemming=True):
     # Erstat tal (men ikke allerede erstattede datoer)
     text = re.sub(r'\b\d+\b', 'NUM', text)
     # Fjern ekstra mellemrum, tabulatorer og linjeskift
-    text = re.sub(r'[^a-zA-Z0-9\s]', '', text)
+    text = re.sub(r'\s+', ' ', text).strip()
 
     # Tokenization: Opdeling af teksten i ord
     tokens = word_tokenize(text)
-
-    # Her fjerner vi stopwords fra vores csv fil.
-    #tokens = [word for word in tokens if word not in stop_words]
-    # Her tilføjer vi stemmer, som reducerer længden af ordene.
-    #tokens = [stemmer.stem(word) for word in tokens]
-    # Tokenization: Opdeling af teksten i ord
-    #tokens = word_tokenize(text)
     
     # Fjern stopwords, hvis det er aktiveret
     if remove_stopwords:
@@ -116,7 +109,7 @@ for chunk in pd.read_csv(file_path, chunksize=chunk_size, usecols=["content"], l
 
     mode = "w" if first_chunk else "a"
 
-    chunk.to.csv(output_file, mode=mode, header=first_chunk, index=False)
+    chunk.to_csv(output_file, mode=mode, header=first_chunk, index=False)
 
     first_chunk = False
     Times += len(chunk)
