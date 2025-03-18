@@ -14,7 +14,6 @@ stop_words = set(stopwords.words('english'))
 stemmer = PorterStemmer()
 
 def clean_text(text, remove_stopwords=True, apply_stemming=True):
-
     # Konverter til små bogstaver
     text = text.lower()
     # Erstat e-mails
@@ -32,11 +31,11 @@ def clean_text(text, remove_stopwords=True, apply_stemming=True):
     tokens = word_tokenize(text)
 
     # Her fjerner vi stopwords fra vores csv fil.
-    tokens = [word for word in tokens if word not in stop_words]
+    #tokens = [word for word in tokens if word not in stop_words]
     # Her tilføjer vi stemmer, som reducerer længden af ordene.
-    tokens = [stemmer.stem(word) for word in tokens]
+    #tokens = [stemmer.stem(word) for word in tokens]
     # Tokenization: Opdeling af teksten i ord
-    tokens = word_tokenize(text)
+    #tokens = word_tokenize(text)
 
     # Fjern stopwords, hvis det er aktiveret
     if remove_stopwords:
@@ -49,6 +48,7 @@ def clean_text(text, remove_stopwords=True, apply_stemming=True):
     # Returnerer tokens som en string, så de kan gemmes i CSV
     return "[" + ", ".join(f"'{token}'" for token in tokens) + "]"  
 
+# Burde være 100% korrekt indtil her:
 import pandas as pd
 
 url = "https://raw.githubusercontent.com/several27/FakeNewsCorpus/master/news_sample.csv"
@@ -87,26 +87,34 @@ print(f"Reduktionshastighed efter stopord: {stopword_reduction:.2f}%")
 print(f"Ordforrådsstørrelse efter stemming: {vocab_size_stemmed}")
 print(f"Reduktionshastighed efter stemming: {stemming_reduction:.2f}%")
 
-print(f"Før stopord fjernes: {original_tokens[:50]}")
-print(f"Efter stopord fjernes: {tokens_no_stopwords[:50]}")
+print(f"Før stopord fjernes: {list(original_tokens)[:50]}")
+print(f"Efter stopord fjernes: {list(tokens_no_stopwords)[:50]}")
 
 # Læs CSV-fil
 #file_path = r"C:\Users\yifan\Downloads\995,000_rows (1).csv"
 file_path = r"C:\Users\marti\OneDrive\Documents\Python Uni\995,000_rows.csv"
 
-df = pd.read_csv(file_path, low_memory=False)
+#df = pd.read_csv(file_path, low_memory=False)
 
-df_cleaned = df.map(lambda x: clean_text(str(x)))
+#df_cleaned = df.map(lambda x: clean_text(str(x)))
 
-print(df_cleaned.head(10))
+#print(df_cleaned.head(10))
+
+chunksize = 10000  # Læs 10.000 rækker ad gangen
+df_list = []
+for chunk in pd.read_csv(file_path, chunksize=chunksize):
+    chunk["processed_text"] = chunk["content"].astype(str).apply(clean_text)
+    df_list.append(chunk)
+
+df = pd.concat(df_list, ignore_index=True)
+
+print(df.head(10))
 
 # Gem forbehandlede data
-df_cleaned.to_csv("processed_995K_FakeNewsCorpus.csv", index=False)
+df.to_csv("processed_995K_FakeNewsCorpus.csv", index=False)
+#df_cleaned.to_csv("processed_995K_FakeNewsCorpus.csv", index=False)
 
-
-
-
-df['processed_text'] = df['content'].astype(str).apply(clean_text)
+#df['processed_text'] = df['content'].astype(str).apply(clean_text)
 
 #Part 2
 #Part 3
