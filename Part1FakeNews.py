@@ -122,10 +122,10 @@ print(f"Færdig")
 df995k = pd.read_csv("processed_995K_FakeNewsCorpus.csv")
 print(df995k.head())
 
-email_count = df['processed_text'].str.count("EMAIL").sum()
-url_count = df['processed_text'].str.count("URL").sum()
-date_count = df['processed_text'].str.count("DATE").sum()
-num_count = df['processed_text'].str.count("NUM").sum()
+email_count = df995k['processed_text'].str.count("EMAIL").sum()
+url_count = df995k['processed_text'].str.count("URL").sum()
+date_count = df995k['processed_text'].str.count("DATE").sum()
+num_count = df995k['processed_text'].str.count("NUM").sum()
 
 print("EMAIL:", email_count)
 print("URL:", url_count)
@@ -137,7 +137,7 @@ from collections import Counter
 
 all_tokens = []
 
-for text in df['processed_text']:
+for text in df995k['processed_text']:
     try:
         tokens = ast.literal_eval(text)
         all_tokens.extend(tokens)
