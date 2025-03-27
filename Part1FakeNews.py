@@ -41,7 +41,6 @@ def clean_text(text, remove_stopwords=True, apply_stemming=True):
     # Returnerer tokens som en string, så de kan gemmes i CSV
     return "[" + ", ".join(f"'{token}'" for token in tokens) + "]"  
 
-# Burde være 100% korrekt indtil her:
 import pandas as pd
 
 url = "https://raw.githubusercontent.com/several27/FakeNewsCorpus/master/news_sample.csv"
@@ -52,7 +51,6 @@ dataframe_cleaned = dataframe.map(lambda x: clean_text(str(x)))
 print(dataframe_cleaned.head(10))
 
 dataframe_cleaned.to_csv("cleaned_dataset.csv", index=False)
-
 
 # Konverter alle tekstkolonner til én samlet tekststreng
 full_text = " ".join(dataframe.astype(str).sum())
@@ -81,20 +79,15 @@ print(f"Ordforrådsstørrelse efter stemming: {vocab_size_stemmed}")
 print(f"Reduktionshastighed efter stemming: {stemming_reduction:.2f}%")
 
 #print("Stopwords liste:", stopwords)
-#print("Antal stopord i listen:", len(stop_words))
+print("Antal stopord i listen:", len(stop_words))
 
-#print("Før stopword fjernes:", word_tokenize(full_text.lower())[:50])
-#print("Efter stopword fjernes:", clean_text(full_text, remove_stopwords=True, apply_stemming=False).split()[:50])
+print("Før stopword fjernes:", word_tokenize(full_text.lower())[:50])
+print("Efter stopword fjernes:", clean_text(full_text, remove_stopwords=True, apply_stemming=False).split()[:50])
 
 # Læs CSV-fil
 #file_path = r"C:\Users\yifan\Downloads\995,000_rows (1).csv"
 file_path = r"C:\Users\marti\OneDrive\Skrivebord\995000_rows.csv"
 
-#df = pd.read_csv(file_path, low_memory=False)
-
-#df_cleaned = df.map(lambda x: clean_text(str(x)))
-
-#print(df_cleaned.head(10))
 print("Trying to start to read chunks:")
 #Ny måde, hvor vi prøver, at indlæse dokumentet lidt af gangen.
 chunk_size = 10000  # Læs 10.000 rækker ad gangen
@@ -105,20 +98,20 @@ first_chunk = True
 Times = 0
 
 for chunk in pd.read_csv(file_path, chunksize=chunk_size, usecols=["content"], low_memory=False):
-    chunk["processed_text"] = chunk["content"].astype(str).apply(clean_text)
+   chunk["processed_text"] = chunk["content"].astype(str).apply(clean_text)
+   
+   mode = "w" if first_chunk else "a"
 
-    mode = "w" if first_chunk else "a"
+   chunk.to_csv(output_file, mode=mode, header=first_chunk, index=False)
 
-    chunk.to_csv(output_file, mode=mode, header=first_chunk, index=False)
-
-    first_chunk = False
-    Times += len(chunk)
-    print(f"{Times}")
+   first_chunk = False
+   Times += len(chunk)
+   print(f"{Times}")
 
 print(f"Færdig")
 
 # task 3
-
+"""
 df995k = pd.read_csv("processed_995K_FakeNewsCorpus.csv")
 print(df995k.head())
 
@@ -162,4 +155,4 @@ plt.xlabel("Ord-rang")
 plt.ylabel("Frekvens")
 plt.grid()
 plt.show()
-
+"""
