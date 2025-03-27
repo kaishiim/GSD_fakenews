@@ -117,6 +117,49 @@ for chunk in pd.read_csv(file_path, chunksize=chunk_size, usecols=["content"], l
 
 print(f"Færdig")
 
-#Part 2
-#Part 3
-#Part 4
+# task 3
+
+df995k = pd.read_csv("processed_995K_FakeNewsCorpus.csv")
+print(df995k.head())
+
+email_count = df['processed_text'].str.count("EMAIL").sum()
+url_count = df['processed_text'].str.count("URL").sum()
+date_count = df['processed_text'].str.count("DATE").sum()
+num_count = df['processed_text'].str.count("NUM").sum()
+
+print("EMAIL:", email_count)
+print("URL:", url_count)
+print("DATE:", date_count)
+print("NUM:", num_count)
+
+import ast  # til at konvertere streng -> liste
+from collections import Counter
+
+all_tokens = []
+
+for text in df['processed_text']:
+    try:
+        tokens = ast.literal_eval(text)
+        all_tokens.extend(tokens)
+    except:
+        continue
+
+freq = Counter(all_tokens)
+most_common = freq.most_common(100)
+
+for word, count in most_common:
+    print(f"{word}: {count}")
+
+import matplotlib.pyplot as plt
+
+most_common_10k = freq.most_common(10000)
+counts = [c for _, c in most_common_10k]
+
+plt.figure(figsize=(12,6))
+plt.plot(counts)
+plt.title("Frekvens af top 10.000 ord")
+plt.xlabel("Ord-rang")
+plt.ylabel("Frekvens")
+plt.grid()
+plt.show()
+
