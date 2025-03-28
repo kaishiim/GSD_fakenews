@@ -5,7 +5,7 @@ I part 1 opretter vi en clean_text funktion og cleaner filen med 995.000 rows. D
 
 Part 2?
 
-Part 3
+## Part 3
 Sørg for at have installet filen "processed_995K_FakeNewsCorpus.csv" (kan hentes fra part1) i sammer folder som 'fake_news_svm.py'. Dernæst vælg parameter 'nr', 'N' og 'word_min_len'. 
 - 'N' står for 'Numbers of most commonwords' og styrer størelsen af puljen for de mest hyppige ord i datasættet.
 - 'word_min_len' styrer minimumslængden af ord, som sorterer fejlagtige elementer tilstede i 'processed_text' kolonnen, som fx ",".
