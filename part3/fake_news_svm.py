@@ -19,7 +19,7 @@ label_mapping = {
 }
 
 # 1. Indlæs dataset
-#file_path = "output.csv"    #small test set (works)
+#file_path = "output.csv"    #small test set (works, BUT REMEMBER TO CHANGE 'label_mapping'  AS THE DATASET CONTAINS NO INSTANCES OF 'reliable' IN THE 'type'-COLUMN)
 file_path = "processed_995K_FakeNewsCorpus.csv" #big dataset (broken)
 df = pd.read_csv(file_path, header=0) 
 
@@ -61,7 +61,7 @@ for art in artcontent:
 
 # Get targets and words
 art_type = df['type'].values.tolist()
-artcontent = df['content'].values.tolist()
+artcontent = df['processed_text'].values.tolist()
 nr = len(art_type) // 100 # antal rækker indlæsning
 print("nr", nr)
 wordlist, y = [], []
@@ -150,7 +150,7 @@ print("X and y", len(X), len(y))
 #print("Y SÆT:", y)
 
 # Split into train and test set
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0) # 70% training and 30% test
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0) # 80% training and 20% test
 del X
 del y
 
