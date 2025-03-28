@@ -14,3 +14,4 @@ Sørg for at have installet filen "processed_995K_FakeNewsCorpus.csv" (kan hente
 
 Jeg anbefaler at kører med N = 1000 til 10.000 og word_min_len = 3. Derefter kør python filen fra en termnial. Hvis du oplever at koden crasher, skyldes det mest sandsynligt fordi at din maskine mangler tilstrækkelig RAM; fittingen af SVM modellen kræver nemlig 9.88 GiB (bemærk at justering på 'nr' ikke kan løse dette memory problem af en eller anden mystisk årsag)
 
+Filen 'output.csv' er en lille version af det store datasæt på 250 rækker, brug den udelukkende til at teste om progammet virker.
