@@ -150,7 +150,7 @@ print("X and y", len(X), len(y))
 #print("Y SÆT:", y)
 
 # Split into train and test set
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0) # 80% training and 20% test
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0) # 70% training and 30% test
 del X
 del y
 
