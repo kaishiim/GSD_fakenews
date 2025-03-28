@@ -86,7 +86,7 @@ print("Antal stopord i listen:", len(stop_words))
 # Her ser vi på før efter vi fjerner stopordene.
 print("Før stopword fjernes:", word_tokenize(full_text.lower())[:50])
 print("Efter stopword fjernes:", clean_text(full_text, remove_stopwords=True, apply_stemming=False).split()[:50])
-"""
+
 # Læs CSV-fil
 #file_path = r"C:\Users\yifan\Downloads\995,000_rows (1).csv"
 file_path = r"C:\Users\marti\OneDrive\Skrivebord\995000_rows.csv"
@@ -112,7 +112,6 @@ for chunk in pd.read_csv(file_path, chunksize=chunk_size, usecols=["content"], l
    print(f"{Times}")
 
 print(f"Færdig")
-"""
 # task 3
 
 df995k = pd.read_csv("processed_995K_FakeNewsCorpus.csv")
@@ -128,8 +127,8 @@ print("URL:", url_count)
 print("DATE:", date_count)
 print("NUM:", num_count)
 
-import ast  # til at konvertere streng -> liste
-from collections import Counter
+import ast  # Til at konvertere streng -> liste
+from collections import Counter # Til at tælle bestemte ord
 
 all_tokens = []
 
