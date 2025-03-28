@@ -114,43 +114,50 @@ for chunk in pd.read_csv(file_path, chunksize=chunk_size, usecols=["content"], l
 print(f"Færdig")
 # task 3
 
-df995k = pd.read_csv("processed_995K_FakeNewsCorpus.csv")
-print(df995k.head())
+import ast
+from collections import Counter
+import matplotlib.pyplot as plt
+import warnings
 
-email_count = df995k['processed_text'].str.count("EMAIL").sum()
-url_count = df995k['processed_text'].str.count("URL").sum()
-date_count = df995k['processed_text'].str.count("DATE").sum()
-num_count = df995k['processed_text'].str.count("NUM").sum()
+# Undgå at vise SyntaxWarnings
+warnings.filterwarnings("ignore", category=SyntaxWarning)
 
+df995k = pd.read_csv(r"C:\Users\yifan\Downloads\processed_995K_FakeNewsCorpus.csv")
+
+email_count = 0
+url_count = 0
+date_count = 0
+num_count = 0
+all_tokens = []
+
+for text in df995k['processed_text']:
+    try:
+        # Ekstra sikkerhed: fjern backslashes
+        cleaned_text = text.replace("\\", "")
+        tokens = ast.literal_eval(cleaned_text)
+
+        all_tokens.extend(tokens)
+
+        email_count += tokens.count('email')
+        url_count += tokens.count('url')
+        date_count += tokens.count('date')
+        num_count += tokens.count('num')
+
+    except Exception:
+        continue  # Spring linjer over med fejl
+
+# Udskriv tællinger
 print("EMAIL:", email_count)
 print("URL:", url_count)
 print("DATE:", date_count)
 print("NUM:", num_count)
 
-import ast  # Til at konvertere streng -> liste
-from collections import Counter # Til at tælle bestemte ord
-
-all_tokens = []
-
-for text in df995k['processed_text']:
-    try:
-        tokens = ast.literal_eval(text)
-        all_tokens.extend(tokens)
-    except:
-        continue
-
+# Frekvensanalyse og visualisering
 freq = Counter(all_tokens)
-most_common = freq.most_common(100)
-
-for word, count in most_common:
-    print(f"{word}: {count}")
-
-import matplotlib.pyplot as plt
-
 most_common_10k = freq.most_common(10000)
 counts = [c for _, c in most_common_10k]
 
-plt.figure(figsize=(12,6))
+plt.figure(figsize=(12, 6))
 plt.plot(counts)
 plt.title("Frekvens af top 10.000 ord")
 plt.xlabel("Ord-rang")
