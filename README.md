@@ -22,7 +22,7 @@ Tager Data_Scraped_During_exercise.csv fil og adder det til trænings datasætte
 
 
 ## Part 3 - Advanced model (SVM)
-Sørg for at have installet filen "processed_995K_FakeNewsCorpus.csv" (kan hentes fra part1) i sammer folder som 'fake_news_svm.py'. Dernæst vælg parameter 'nr', 'N' og 'word_min_len'. 
+Sørg for at have installet inddata-filen "processed_995K_FakeNewsCorpus.csv" (kan hentes fra part1) i sammer folder som 'fake_news_svm.py'. Dernæst vælg parameter 'nr', 'N' og 'word_min_len'. 
 - 'N' står for 'Numbers of most commonwords' og styrer størelsen af puljen for de mest hyppige ord i datasættet.
 - 'word_min_len' styrer minimumslængden af ord, som sorterer fejlagtige elementer tilstede i 'processed_text' kolonnen, som fx ",".
 - 'nr' står for 'number of rows' og styrer hvor mange rækker indlæses fra datasættet. Juster denne parameter efter behov hvis du oplever memory problemer
