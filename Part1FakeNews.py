@@ -94,7 +94,11 @@ print(f"Reduktionshastighed efter stemming: {stemming_reduction:.2f}%")
 
 # task 3
 
+<<<<<<< Updated upstream
 import pandas as pd
+=======
+# Importerer nye libaries til counting, plotting, warnings og 
+>>>>>>> Stashed changes
 import ast
 from collections import Counter
 import matplotlib.pyplot as plt
@@ -103,7 +107,7 @@ import warnings
 # Undgå at vise SyntaxWarnings
 warnings.filterwarnings("ignore", category=SyntaxWarning)
 
-df995k = pd.read_csv(r"C:\Users\yifan\Downloads\processed_995K_FakeNewsCorpus.csv")
+df995k = pd.read_csv(r"c:\Users\marti\Downloads\MitFørsteProject\Algorithmsopgaver\KUDataScience\processed_995K_FakeNewsCorpus.csv") # Muligvis indsæt egen sti til, at kunne køre dette?
 
 email_count = 0
 url_count = 0
@@ -111,6 +115,7 @@ date_count = 0
 num_count = 0
 all_tokens = []
 
+# For loop, som 
 for text in df995k['processed_text']:
     try:
         # Ekstra sikkerhed: fjern backslashes
