@@ -1,5 +1,3 @@
-# fil2.py
-
 import pandas as pd
 import numpy as np
 import nltk
@@ -12,11 +10,10 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.model_selection import train_test_split
 from scipy.sparse import hstack
 
-# NLTK resourcer
 nltk.download('punkt')
 nltk.download('stopwords')
 
-# === Mapping til binær klassificering ===
+# Mapping til binær klassificering af de forskelige typer
 label_mapping = {
     "reliable": 1,
     "fake": 0,
@@ -29,18 +26,18 @@ label_mapping = {
     "hate": 0,
 }
 
-# === 1. Indlæs data fra Fil1's output ===
+# Indlæs data fra Task 4 i mappen Split_Data
 train_df = pd.read_csv("Split_Data/995K_train.csv")
 val_df = pd.read_csv("Split_Data/995K_val.csv")
 test_df = pd.read_csv("Split_Data/995K_test.csv")
 
-# === 2. Tilføj binære labels ===
+#Tilføj binære labels til typerne
 for df in [train_df, val_df, test_df]:
     df['label'] = df['type'].map(label_mapping)
     df.dropna(subset=['label', 'processed_text'], inplace=True)
     df['label'] = df['label'].astype(int)
 
-# === 3. Model 1: Kun tekst ===
+# Model 1: Kun tekst (processed_text)
 vectorizer = CountVectorizer(max_features=10000, stop_words='english')
 
 X_train = vectorizer.fit_transform(train_df['processed_text'])
@@ -56,10 +53,11 @@ print(classification_report(test_df['label'], preds_1))
 print(f"F1-score: {f1_score(test_df['label'], preds_1):.4f}")
 print(f"Accuracy: {accuracy_score(test_df['label'], preds_1):.4f}")
 
+# Lægger modellerne i Part2-Model mappen
 joblib.dump(model_1, "Part2-Model/model_1_text_only.pkl")
 joblib.dump(vectorizer, "Part2-Model/vectorizer_1.pkl")
 
-# === 4. Model 2: Tekst + Domain ===
+# Model 2: Tekst (processed_text) + Domain kolonnen 
 if "Domain" not in train_df.columns:
     print("Fejl: 'Domain'-kolonnen mangler.")
     exit()
@@ -85,26 +83,22 @@ print(f"Accuracy: {accuracy_score(test_df['label'], preds_2):.4f}")
 
 joblib.dump(model_2, "Part2-Model/model_2_text_domain.pkl")
 joblib.dump(domain_encoder, "Part2-Model/domain_encoder_2.pkl")
-joblib.dump(vectorizer, "Part2-Model/vectorizer_2.pkl")  # samme som model 1
+joblib.dump(vectorizer, "Part2-Model/vectorizer_2.pkl")  # samme som i model 1
 
 
-# === 5. Model 3: Træn med ekstra data + originalt træningsdata ===
-extra_file = r"C:\Users\rasmu\Documents\GitHub\GSD_fakenews\Data_Scraped_During_Exercise2.csv"
+# Model 3: Træn med ekstra data + originalt træningsdata (processed_text)
+extra_file = "Data_Scraped_During_Exercise2.csv"
 df_extra = pd.read_csv(extra_file)
 
-if "type" not in df_extra.columns or "processed_text" not in df_extra.columns:
-    print("Fejl: Det ekstra datasæt mangler 'type' eller 'processed_text'")
-    exit()
 
 df_extra['label'] = df_extra['type'].map(label_mapping)
 df_extra.dropna(subset=['label', 'processed_text'], inplace=True)
 df_extra['label'] = df_extra['label'].astype(int)
 
-# === Kombiner ekstra data med det originale træningssæt ===
+# Tilføjer det ekstra data mtiled det originale træningssæt (995K_train.csv)
 combined_train_text = pd.concat([train_df['processed_text'], df_extra['processed_text']], ignore_index=True)
 combined_train_labels = pd.concat([train_df['label'], df_extra['label']], ignore_index=True)
 
-# Brug val_df og test_df fra tidligere
 vectorizer_3 = CountVectorizer(max_features=10000, stop_words='english')
 X_train_3 = vectorizer_3.fit_transform(combined_train_text)
 X_val_3 = vectorizer_3.transform(val_df['processed_text'])

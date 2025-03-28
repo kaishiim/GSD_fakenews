@@ -8,7 +8,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import OneHotEncoder
 from scipy.sparse import hstack
 
-# === 1. Label mapping ===
+# Label mapping til processed_text og til Liar data-sættet
 label_mapping = {
     "true": 1,
     "mostly-true": 0,
@@ -27,7 +27,7 @@ label_mapping = {
     "hate": 0,
 }
 
-# === 2. Test kun model 1 på LIAR ===
+# Test kun model 1 på LIAR 
 print("\n=== Test: Model 1 på LIAR ===")
 df_test_liar = pd.read_csv("liar_dataset/Clean_test.tsv", sep="\t")
 df_test_liar = df_test_liar[["cleaned_text", "label"]].dropna()
@@ -38,6 +38,7 @@ df_test_liar["label"] = df_test_liar["label"].astype(int)
 test_text_liar = df_test_liar["cleaned_text"]
 test_labels_liar = df_test_liar["label"]
 
+#Loader model 1 fra mappen Part2-Model
 model_1 = joblib.load("part2-Model/model_1_text_only.pkl")
 vectorizer_1 = joblib.load("part2-Model/vectorizer_1.pkl")
 X_test_liar = vectorizer_1.transform(test_text_liar)
@@ -57,7 +58,7 @@ plt.ylabel("Actual")
 plt.tight_layout()
 plt.show()
 
-# === 3. Test alle modeller på 995K_val.csv ===
+# Test alle modeller på 995K_val.csv 
 print("\n=== Test: Alle modeller på 995K_val.csv ===")
 df_val = pd.read_csv("Split_Data/995K_val.csv")
 df_val = df_val[["processed_text", "type", "Domain"]].dropna()
@@ -68,6 +69,7 @@ df_val["label"] = df_val["label"].astype(int)
 val_text = df_val["processed_text"]
 val_labels = df_val["label"]
 
+#Funktion til at teste på de 3 modeller
 def evaluate_model_on_995k(name, model_path, vectorizer_path, domain_encoder_path=None, domain_series=None):
     print(f"\nEvaluating {name} on 995K_val.csv")
     model = joblib.load(model_path)
@@ -97,7 +99,7 @@ def evaluate_model_on_995k(name, model_path, vectorizer_path, domain_encoder_pat
     plt.tight_layout()
     plt.show()
 
-# === Kør alle modeller ===
+#Køre på alle modeller 
 evaluate_model_on_995k(
     name="Model 1: Text only",
     model_path="part2-Model/model_1_text_only.pkl",
