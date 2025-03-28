@@ -1,5 +1,6 @@
 # Part 1
 ## Task 1
+# Importering af alle libaries og downloading af punkter.
 import re
 import nltk
 nltk.download('punkt')
@@ -9,11 +10,11 @@ from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 nltk.download('stopwords')
 
-#Her initialiserer vi stopwords til, at fjerne 
+# Her initialiserer vi stopwords til, at fjerne 
 stop_words = set(stopwords.words('english'))
-#Her initialiserer vi stemmer til, at reducerer ordenes længde.
+# Her initialiserer vi stemmer til, at reducerer ordenes længde.
 stemmer = PorterStemmer()
-
+# Her tilføjer vi hovedfunktionen, som cleaner en text, såsom et FakeNews dokument.
 def clean_text(text, remove_stopwords=True, apply_stemming=True):
     # Konverter til små bogstaver
     text = text.lower()
@@ -42,18 +43,17 @@ def clean_text(text, remove_stopwords=True, apply_stemming=True):
     # Returnerer tokens som en string, så de kan gemmes i CSV
     return "[" + ", ".join(f"'{token}'" for token in tokens) + "]"  
 
-# Burde være 100% korrekt indtil her:
+# Bruger Panda til indlæsning af fil
 import pandas as pd
-
+# Indlæser url fra github - med news sample.
 url = "https://raw.githubusercontent.com/several27/FakeNewsCorpus/master/news_sample.csv"
 
 dataframe = pd.read_csv(url)
-
+# Bruger vores funktion clean_text på vores url og laver det til en streng
 dataframe_cleaned = dataframe.map(lambda x: clean_text(str(x)))
 print(dataframe_cleaned.head(10))
-
+# Opretter en cleaned_dataset.csv fil.
 dataframe_cleaned.to_csv("cleaned_dataset.csv", index=False)
-
 
 # Konverter alle tekstkolonner til én samlet tekststreng
 full_text = " ".join(dataframe.astype(str).sum())
@@ -62,11 +62,11 @@ full_text = " ".join(dataframe.astype(str).sum())
 original_tokens = set(word_tokenize(full_text.lower()))
 original_vocab_size = len(original_tokens)
 
-# Efter fjernelse af stopord
+# Ordforråd efter fjernelse af stopord
 tokens_no_stopwords = set(clean_text(full_text, remove_stopwords=True, apply_stemming=False))
 vocab_size_no_stopwords = len(tokens_no_stopwords)
 
-# Efter stemming
+# Ordforråed efter stemming af ordene
 tokens_stemmed = set(clean_text(full_text, remove_stopwords=True, apply_stemming=True))
 vocab_size_stemmed = len(tokens_stemmed)
 
@@ -74,7 +74,7 @@ vocab_size_stemmed = len(tokens_stemmed)
 stopword_reduction = (original_vocab_size - vocab_size_no_stopwords) / original_vocab_size * 100
 stemming_reduction = (vocab_size_no_stopwords - vocab_size_stemmed) / vocab_size_no_stopwords * 100
 
-# Udskriv resultater
+# Udskriv alle resultater
 print(f"Oprindelig ordforrådsstørrelse: {original_vocab_size}")
 print(f"Ordforrådsstørrelse efter fjernelse af stopord: {vocab_size_no_stopwords}")
 print(f"Reduktionshastighed efter stopord: {stopword_reduction:.2f}%")
@@ -82,11 +82,10 @@ print(f"Ordforrådsstørrelse efter stemming: {vocab_size_stemmed}")
 print(f"Reduktionshastighed efter stemming: {stemming_reduction:.2f}%")
 
 # Læs CSV-fil
-#file_path = r"C:\Users\yifan\Downloads\995,000_rows (1).csv"
-file_path = r"C:\Users\marti\OneDrive\Skrivebord\995000_rows.csv"
+file_path = r"C:\Users\marti\OneDrive\Skrivebord\995000_rows.csv" #Indsæt eget filnavn:
 
 print("Trying to start to read chunks:")
-#Ny måde, hvor vi prøver, at indlæse dokumentet lidt af gangen.
+# Ny måde, hvor vi prøver, at indlæse dokumentet lidt af gangen.
 chunk_size = 10000  # Læs 10.000 rækker ad gangen
 
 # Gem forbehandlede data
@@ -106,7 +105,7 @@ for chunk in pd.read_csv(file_path, chunksize=chunk_size, usecols=["content"], l
    print(f"{Times}")
 print("Færdig")
 
-# task 3
+# Task 3
 
 # Importerer nye libaries til counting, plotting, warnings og 
 import ast
@@ -117,7 +116,7 @@ import warnings
 # Undgå at vise SyntaxWarnings
 warnings.filterwarnings("ignore", category=SyntaxWarning)
 
-df995k = pd.read_csv(r"c:\Users\marti\Downloads\MitFørsteProject\Algorithmsopgaver\KUDataScience\processed_995K_FakeNewsCorpus.csv") # Muligvis indsæt egen sti til, at kunne køre dette?
+df995k = pd.read_csv(r"c:\Users\marti\Downloads\MitFørsteProject\Algorithmsopgaver\KUDataScience\processed_995K_FakeNewsCorpus.csv") # Indlæs egen fil efter, at have kørt første del, hvor der oprettes proccessed-995.000.csv
 
 email_count = 0
 url_count = 0
@@ -152,7 +151,7 @@ print("NUM:", num_count)
 freq = Counter(all_tokens)
 most_common_10k = freq.most_common(10000)
 counts = [c for _, c in most_common_10k]
-
+# Plotning af data, så vi får et billede med 10.000 top ord
 plt.figure(figsize=(12, 6))
 plt.plot(counts)
 plt.title("Frekvens af top 10.000 ord")
@@ -160,4 +159,3 @@ plt.xlabel("Ord-rang")
 plt.ylabel("Frekvens")
 plt.grid()
 plt.show()
-
