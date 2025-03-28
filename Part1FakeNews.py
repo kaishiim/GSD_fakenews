@@ -1,5 +1,6 @@
 # Part 1
 ## Task 1
+# Indlæser alle vores libaries.
 import re
 import nltk
 nltk.download('punkt_tab')
@@ -12,7 +13,7 @@ nltk.download('stopwords')
 stop_words = set(stopwords.words('english'))
 #Her initialiserer vi stemmer til, at reducerer ordenes længde.
 stemmer = PorterStemmer()
-
+# Her tilføjer vi hovedfunktionen, som cleaner en text, såsom et FakeNews dokument.
 def clean_text(text, remove_stopwords=True, apply_stemming=True):
     # Konverter til små bogstaver
     text = text.lower()
@@ -42,14 +43,14 @@ def clean_text(text, remove_stopwords=True, apply_stemming=True):
     return "[" + ", ".join(f"'{token}'" for token in tokens) + "]"  
 
 import pandas as pd
-
+# Indlæser url fra github - med news sample.
 url = "https://raw.githubusercontent.com/several27/FakeNewsCorpus/master/news_sample.csv"
-
+# Bruger Panda til indlæsning af fil.
 dataframe = pd.read_csv(url)
-
+# Bruger vores funktion clean_text på vores url og laver det til en streng
 dataframe_cleaned = dataframe.map(lambda x: clean_text(str(x)))
 print(dataframe_cleaned.head(10))
-
+# Opretter en cleaned_dataset.csv fil.
 dataframe_cleaned.to_csv("cleaned_dataset.csv", index=False)
 
 # Konverter alle tekstkolonner til én samlet tekststreng
@@ -59,11 +60,11 @@ full_text = " ".join(dataframe.astype(str).sum())
 original_tokens = set(word_tokenize(full_text.lower()))
 original_vocab_size = len(original_tokens)
 
-# Efter fjernelse af stopord
+# Ordforråd efter fjernelse af stopord
 tokens_no_stopwords = set(clean_text(full_text, remove_stopwords=True, apply_stemming=False))
 vocab_size_no_stopwords = len(tokens_no_stopwords)
 
-# Efter stemming
+# Ordforråed efter stemming af ordene
 tokens_stemmed = set(clean_text(full_text, remove_stopwords=True, apply_stemming=True))
 vocab_size_stemmed = len(tokens_stemmed)
 
@@ -71,19 +72,21 @@ vocab_size_stemmed = len(tokens_stemmed)
 stopword_reduction = (original_vocab_size - vocab_size_no_stopwords) / original_vocab_size * 100
 stemming_reduction = (vocab_size_no_stopwords - vocab_size_stemmed) / vocab_size_no_stopwords * 100
 
-# Udskriv resultater
+# Udskriv alle resultater
 print(f"Oprindelig ordforrådsstørrelse: {original_vocab_size}")
 print(f"Ordforrådsstørrelse efter fjernelse af stopord: {vocab_size_no_stopwords}")
 print(f"Reduktionshastighed efter stopord: {stopword_reduction:.2f}%")
 print(f"Ordforrådsstørrelse efter stemming: {vocab_size_stemmed}")
 print(f"Reduktionshastighed efter stemming: {stemming_reduction:.2f}%")
 
-#print("Stopwords liste:", stopwords)
+# En liste af stopord, som bliver fjernet og derefter antalet af stopord.
+print("Stopwords liste:", stopwords)
 print("Antal stopord i listen:", len(stop_words))
 
+# Her ser vi på før efter vi fjerner stopordene.
 print("Før stopword fjernes:", word_tokenize(full_text.lower())[:50])
 print("Efter stopword fjernes:", clean_text(full_text, remove_stopwords=True, apply_stemming=False).split()[:50])
-
+"""
 # Læs CSV-fil
 #file_path = r"C:\Users\yifan\Downloads\995,000_rows (1).csv"
 file_path = r"C:\Users\marti\OneDrive\Skrivebord\995000_rows.csv"
@@ -109,9 +112,9 @@ for chunk in pd.read_csv(file_path, chunksize=chunk_size, usecols=["content"], l
    print(f"{Times}")
 
 print(f"Færdig")
-
-# task 3
 """
+# task 3
+
 df995k = pd.read_csv("processed_995K_FakeNewsCorpus.csv")
 print(df995k.head())
 
@@ -155,4 +158,3 @@ plt.xlabel("Ord-rang")
 plt.ylabel("Frekvens")
 plt.grid()
 plt.show()
-"""
