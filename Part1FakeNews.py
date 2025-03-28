@@ -2,6 +2,7 @@
 ## Task 1
 import re
 import nltk
+nltk.download('punkt')
 nltk.download('punkt_tab')
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
@@ -88,74 +89,56 @@ print(f"Reduktionshastighed efter stemming: {stemming_reduction:.2f}%")
 
 # Læs CSV-fil
 #file_path = r"C:\Users\yifan\Downloads\995,000_rows (1).csv"
-file_path = r"C:\Users\marti\OneDrive\Skrivebord\995000_rows.csv"
 
-#df = pd.read_csv(file_path, low_memory=False)
 
-#df_cleaned = df.map(lambda x: clean_text(str(x)))
-
-#print(df_cleaned.head(10))
-print("Trying to start to read chunks:")
-#Ny måde, hvor vi prøver, at indlæse dokumentet lidt af gangen.
-chunk_size = 10000  # Læs 10.000 rækker ad gangen
-
-# Gem forbehandlede data
-output_file = "processed_995K_FakeNewsCorpus.csv"
-first_chunk = True
-Times = 0
-
-for chunk in pd.read_csv(file_path, chunksize=chunk_size, usecols=["content"], low_memory=False):
-    chunk["processed_text"] = chunk["content"].astype(str).apply(clean_text)
-
-    mode = "w" if first_chunk else "a"
-
-    chunk.to_csv(output_file, mode=mode, header=first_chunk, index=False)
-
-    first_chunk = False
-    Times += len(chunk)
-    print(f"{Times}")
-
-print(f"Færdig")
 
 # task 3
 
-df995k = pd.read_csv("processed_995K_FakeNewsCorpus.csv")
-print(df995k.head())
+import pandas as pd
+import ast
+from collections import Counter
+import matplotlib.pyplot as plt
+import warnings
 
-email_count = df995k['processed_text'].str.count("EMAIL").sum()
-url_count = df995k['processed_text'].str.count("URL").sum()
-date_count = df995k['processed_text'].str.count("DATE").sum()
-num_count = df995k['processed_text'].str.count("NUM").sum()
+# Undgå at vise SyntaxWarnings
+warnings.filterwarnings("ignore", category=SyntaxWarning)
 
+df995k = pd.read_csv(r"C:\Users\yifan\Downloads\processed_995K_FakeNewsCorpus.csv")
+
+email_count = 0
+url_count = 0
+date_count = 0
+num_count = 0
+all_tokens = []
+
+for text in df995k['processed_text']:
+    try:
+        # Ekstra sikkerhed: fjern backslashes
+        cleaned_text = text.replace("\\", "")
+        tokens = ast.literal_eval(cleaned_text)
+
+        all_tokens.extend(tokens)
+
+        email_count += tokens.count('email')
+        url_count += tokens.count('url')
+        date_count += tokens.count('date')
+        num_count += tokens.count('num')
+
+    except Exception:
+        continue  # Spring linjer over med fejl
+
+# Udskriv tællinger
 print("EMAIL:", email_count)
 print("URL:", url_count)
 print("DATE:", date_count)
 print("NUM:", num_count)
 
-import ast  # til at konvertere streng -> liste
-from collections import Counter
-
-all_tokens = []
-
-for text in df995k['processed_text']:
-    try:
-        tokens = ast.literal_eval(text)
-        all_tokens.extend(tokens)
-    except:
-        continue
-
+# Frekvensanalyse og visualisering
 freq = Counter(all_tokens)
-most_common = freq.most_common(100)
-
-for word, count in most_common:
-    print(f"{word}: {count}")
-
-import matplotlib.pyplot as plt
-
 most_common_10k = freq.most_common(10000)
 counts = [c for _, c in most_common_10k]
 
-plt.figure(figsize=(12,6))
+plt.figure(figsize=(12, 6))
 plt.plot(counts)
 plt.title("Frekvens af top 10.000 ord")
 plt.xlabel("Ord-rang")
