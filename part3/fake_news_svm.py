@@ -19,8 +19,8 @@ label_mapping = {
 }
 
 # 1. Indlæs dataset
-#file_path = "output.csv"    #small test set
-file_path = "processed_995K_FakeNewsCorpus.csv"
+#file_path = "output.csv"    #small test set (works)
+file_path = "processed_995K_FakeNewsCorpus.csv" #big dataset (broken)
 df = pd.read_csv(file_path, header=0) 
 
 
