@@ -115,16 +115,16 @@ import warnings
 
 # Undgå at vise SyntaxWarnings
 warnings.filterwarnings("ignore", category=SyntaxWarning)
-
+# Indlæsning af fil, som indeholder processed_995K_FakeNewsCorpus.csv filen - Eksempel nedenunder:
 df995k = pd.read_csv(r"c:\Users\marti\Downloads\MitFørsteProject\Algorithmsopgaver\KUDataScience\processed_995K_FakeNewsCorpus.csv") # Indlæs egen fil efter, at have kørt første del, hvor der oprettes proccessed-995.000.csv
-
+# Initialisering af variable, hvor de får værdien = 0
 email_count = 0
 url_count = 0
 date_count = 0
 num_count = 0
 all_tokens = []
 
-# For loop, som 
+# For loop, som kører igennem teksten og counter - "email, url, date og num", som senere bliver printet til visulisering: 
 for text in df995k['processed_text']:
     try:
         # Ekstra sikkerhed: fjern backslashes
@@ -132,7 +132,7 @@ for text in df995k['processed_text']:
         tokens = ast.literal_eval(cleaned_text)
 
         all_tokens.extend(tokens)
-
+        # Counting
         email_count += tokens.count('email')
         url_count += tokens.count('url')
         date_count += tokens.count('date')
