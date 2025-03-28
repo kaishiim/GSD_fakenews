@@ -18,25 +18,25 @@ stemmer = PorterStemmer()
 def clean_text(text, remove_stopwords=True, apply_stemming=True):
     # Konverter til små bogstaver
     text = text.lower()
-    # Erstat e-mails
+    # Erstatter e-mails
     text = re.sub(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b', 'EMAIL', text)
-    # Erstat URLs (http, https, www)
+    # Erstatter URLs (http, https, www)
     text = re.sub(r'\b(?:https?://|www\.)\S+\b', 'URL', text)
-    # Erstat datoer i forskellige formater (YYYY-MM-DD, DD/MM/YYYY, MM/DD/YYYY, osv.)
+    # Erstatter datoer i forskellige formater (YYYY-MM-DD, DD/MM/YYYY, MM/DD/YYYY, osv.)
     text = re.sub(r'\b(?:\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|\d{4}-\d{2}-\d{2})\b', 'DATE', text)
-    # Erstat tal (men ikke allerede erstattede datoer)
+    # Erstatter tal (men ikke allerede erstattede datoer)
     text = re.sub(r'\b\d+\b', 'NUM', text)
-    # Fjern ekstra mellemrum, tabulatorer og linjeskift
+    # Fjerner ekstra mellemrum, tabulatorer og linjeskift
     text = re.sub(r'\s+', ' ', text).strip()
 
     # Tokenization: Opdeling af teksten i ord
     tokens = word_tokenize(text)
     
-    # Fjern stopwords, hvis det er aktiveret
+    # Fjerner stopwords, hvis det er aktiveret
     if remove_stopwords:
         tokens = [word for word in tokens if word not in stop_words]
 
-    # Stem ordene, hvis det er aktiveret
+    # Stemmer ordene, hvis det er aktiveret
     if apply_stemming:
         tokens = [stemmer.stem(word) for word in tokens]
 
