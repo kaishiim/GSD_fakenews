@@ -26,7 +26,7 @@ df = pd.read_csv(file_path, header=0)
 
 
 # Parameters
-N = 2000  # number of most common words
+N = 1000  # number of most common words
 word_min_len = 3 # minimum length of words
 
 
@@ -62,7 +62,7 @@ for art in artcontent:
 # Get targets and words
 art_type = df['type'].values.tolist()
 artcontent = df['content'].values.tolist()
-nr = len(art_type) // 10 # antal rækker indlæsning
+nr = len(art_type) // 100 # antal rækker indlæsning
 print("nr", nr)
 wordlist, y = [], []
 for i in range(nr):
@@ -89,7 +89,7 @@ print("y has size", len(y))
 # Collect N most common words from dataframe column 'content'
 word_cnt = Counter(wordlist)
 common_words = word_cnt.most_common(N)
-print(common_words)
+#print(common_words)
 print(len(word_cnt))
 del wordlist
 del word_cnt
@@ -103,7 +103,7 @@ for i, kc in enumerate(common_words):
     k, c = kc
     print(i, k, c)
     w2i[k] = i
-print(w2i)
+#print(w2i)
 del common_words
 
 # Create a vector for each article
@@ -136,8 +136,8 @@ for i in range(nr):
             for wrd in wl:
                 wrd2 = wrd.strip()[1:-1]
                 if wrd2 in w2i:  # brug ord fra ww2 som index i w2i
-                    i = w2i[wrd2]
-                    articlevector[i] = 1
+                    inx = w2i[wrd2]
+                    articlevector[inx] = 1
             articlevectors.append(articlevector)
 X = articlevectors
 del(art_type)
@@ -145,7 +145,7 @@ del articlevector
 del articlevectors
 del w2i
 
-print("X and y")
+print("X and y", len(X), len(y))
 #print("X SÆT:", X)
 #print("Y SÆT:", y)
 
